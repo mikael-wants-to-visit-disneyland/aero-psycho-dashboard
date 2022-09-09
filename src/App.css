@@ -27,10 +27,6 @@
   opacity: 0.65;
 }
 
-.content {
-
-}
-
 .gauge {
   display: flex;
   flex-direction: column;
