@@ -3,7 +3,7 @@ import "./App.css";
 import * as React from "react";
 
 import 'antd/dist/antd.css';
-import { Space, Table, Tag, Progress } from 'antd';
+import { Space, Table, Tag, Progress, Spin } from 'antd';
 import _ from 'lodash'
 import Gauge from "./components/Gauge";
 import axios from 'axios'
@@ -71,8 +71,7 @@ export default function App() {
   }, [airport])
   return (
     <div className="App">
-      {data &&
-      <div className="centralized">
+      <div className="margin">
         <div className="header">
           <div className="header-airport-name">{airport}</div>
           <div className="header-gauges">
@@ -81,9 +80,9 @@ export default function App() {
             </div>
         </div>
         <div className="content">
-          <Table columns={columns} dataSource={data.map((row) => ({ ...row, key: row.flightCode }))} size='small' />
+          {data.length > 0 ? <Table columns={columns} dataSource={data.map((row) => ({ ...row, key: row.flightCode }))} size='small' /> : <div className="centered"><Spin size='large'/></div>}
         </div>
-      </div>}
+      </div>
     </div>
   );
 }

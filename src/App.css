@@ -6,7 +6,7 @@
   justify-content: center;
 }
 
-.centralized {
+.margin {
   width: 70%;
   height: 100%;
 }
@@ -51,4 +51,10 @@
 .progress-bar .ant-progress-text {
   font-size: 10px;
   opacity: 0.6;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
