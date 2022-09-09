@@ -7,18 +7,24 @@
 }
 
 .centralized {
-  width: 85%;
+  width: 70%;
   height: 100%;
 }
 
 .header {
   display: flex;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 55px;
+  margin-bottom: 30px;
+  justify-content: space-between;
+}
+
+.header-gauges {
+  display: flex;
 }
 
 .header-airport-name {
-  font-size: 26px;
+  font-size: 33px;
+  opacity: 0.65;
 }
 
 .content {
@@ -39,7 +45,7 @@
   margin-bottom: 3px;
   font-size: 11px;
   text-align: center;
-  opacity: 0.4;
+  opacity: 0.45;
 }
 
 .progress-bar .ant-progress-text {
