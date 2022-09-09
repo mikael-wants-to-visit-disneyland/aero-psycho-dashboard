@@ -1,32 +1,27 @@
 .App {
-  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  background: #fafafa;
+  display: flex;
+  justify-content: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.centralized {
+  width: 85%;
+  height: 100%;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.header {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.App-title {
-  font-size: 1.5em;
+.header-airport-name {
+  font-size: 26px;
 }
 
-.App-intro {
-  font-size: large;
-}
+.content {
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
