@@ -13,7 +13,6 @@
 
 .header {
   display: flex;
-  flex-direction: column;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -24,4 +23,26 @@
 
 .content {
 
+}
+
+.gauge {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.gauge .ant-progress-text {
+  font-size: 12px !important;
+}
+
+.gauge-name {
+  margin-bottom: 3px;
+  font-size: 11px;
+  text-align: center;
+  opacity: 0.4;
+}
+
+.progress-bar .ant-progress-text {
+  font-size: 10px;
+  opacity: 0.6;
 }
