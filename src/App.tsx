@@ -4,10 +4,11 @@ import * as React from "react";
 
 import "antd/dist/antd.css";
 //import { Table, Tag, Progress, Spin } from "antd";
-import { Table, Progress, Spin } from "antd";
+import { Table, Progress, Spin, Select } from "antd";
 import _ from "lodash";
 import Gauge from "./components/Gauge";
 import axios from "axios";
+import { Option } from "antd/lib/mentions";
 
 const LOVE_SYMBOL = "💗";
 
@@ -16,11 +17,17 @@ export interface IFlight {
   date: string;
   estimatedDepartureTime: string;
   estimatedArrivalTime: string;
-  originAirportId: string;
-  destinationAirportId: string;
+  airportCode: string;
+  departureAirportCode: string;
   mood: number;
   tiredness: number;
   love: number;
+}
+
+export interface IAirport {
+  airportCode: string;
+  location: string;
+  suffix: string;
 }
 
 const columns = [
@@ -41,8 +48,8 @@ const columns = [
   },
   {
     title: "Origin",
-    dataIndex: "originAirportId",
-    key: "originAirportId",
+    dataIndex: "originAirportCode",
+    key: "originAirportCode",
   },
   {
     title: "Mood",
@@ -70,38 +77,71 @@ const columns = [
 
 export default function App() {
   const [data, setData] = React.useState<IFlight[]>([]);
-  const [airport, setAirport] = React.useState<string>("");
+  const [airports, setAirports] = React.useState<IAirport[]>([]);
+  const [selectedAirport, setSelectedAirport] = React.useState<
+    IAirport | undefined
+  >(undefined);
+
   React.useEffect(() => {
-    !airport && setAirport("London Heathrow");
-  }, []);
+    !selectedAirport && setSelectedAirport(airports[0]);
+  }, [airports]);
+
   React.useEffect(() => {
     axios
       .get(
-        "https://d7n2m5unt8.execute-api.us-east-1.amazonaws.com/getFlights",
+        "https://ny0tqhxb45.execute-api.us-east-1.amazonaws.com/getFlights",
         {
           params: {
-            originAirportId: "BOO",
+            airportCode: "HOO",
           },
         },
       )
       .then((response) => setData(response.data));
-  }, [airport]);
+  }, [selectedAirport]);
+
+  React.useEffect(() => {
+    if (airports.length > 0) {
+      return;
+    }
+    axios
+      .get("https://ny0tqhxb45.execute-api.us-east-1.amazonaws.com/getAirports")
+      .then((response) => setAirports(response.data));
+  }, []);
+
   return (
     <div className="App">
       <div className="margin">
         <div className="header">
-          <div className="header-airport-name">{airport}</div>
-          <div className="header-gauges">
-            <Gauge
-              name="Mood"
-              value={parseFloat(_.mean(data.map((row) => row.mood)).toFixed(0))}
-            />
-            <Gauge
-              name="Tiredness"
-              value={parseFloat(
-                _.mean(data.map((row) => row.tiredness)).toFixed(0),
-              )}
-            />
+          <Select
+            value={selectedAirport?.airportCode}
+            optionFilterProp="children"
+            onChange={(code) =>
+              setSelectedAirport(airports.find((a) => a.airportCode === code))
+            }
+          >
+            {airports.map((a) => (
+              <Option
+                key={a.airportCode}
+                value={a.airportCode}
+              >{`${a.location} ${a.suffix}`}</Option>
+            ))}
+          </Select>
+          <div className="header-row">
+            <div className="header-airport-name">{`${selectedAirport?.location} ${selectedAirport?.suffix}`}</div>
+            <div className="header-gauges">
+              <Gauge
+                name="Mood"
+                value={parseFloat(
+                  _.mean(data.map((row) => row.mood)).toFixed(0),
+                )}
+              />
+              <Gauge
+                name="Tiredness"
+                value={parseFloat(
+                  _.mean(data.map((row) => row.tiredness)).toFixed(0),
+                )}
+              />
+            </div>
           </div>
         </div>
         <div className="content">
