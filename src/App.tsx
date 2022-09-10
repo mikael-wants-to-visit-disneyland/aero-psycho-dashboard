@@ -4,21 +4,21 @@ import * as React from "react";
 
 import "antd/dist/antd.css";
 //import { Table, Tag, Progress, Spin } from "antd";
-import { Table, Progress, Spin, Select } from "antd";
+import { Table, Progress, Spin, Select, Modal } from "antd";
 import _ from "lodash";
-import Gauge from "./components/Gauge";
 import axios from "axios";
 import { Option } from "antd/lib/mentions";
+import GaugeRow from "./components/GaugeRow";
 
-const LOVE_SYMBOL = "💗";
-const MAX_LOVE = 3;
+export const LOVE_SYMBOL = "💗";
+export const MAX_LOVE = 3;
 
-const INDICATORS = {
+export const INDICATORS = {
   mood: "mood",
   tiredness: "tiredness",
   love: "love",
 } as const;
-const INDICATOR_COLORS = {
+export const INDICATOR_COLORS = {
   [INDICATORS.mood]: "#10f000",
   [INDICATORS.tiredness]: "#177fff",
 };
@@ -30,15 +30,19 @@ export interface IFlight {
   estimatedArrivalTime: string;
   airportCode: string;
   departureAirportCode: string;
-  mood: number;
-  tiredness: number;
-  love: number;
+  sensorData: ISensorData;
 }
 
 export interface IAirport {
   airportCode: string;
   location: string;
   suffix: string;
+}
+
+export interface ISensorData {
+  mood: number;
+  tiredness: number;
+  love: number;
 }
 
 const columns = [
@@ -97,10 +101,13 @@ const columns = [
 ];
 
 export default function App() {
-  const [data, setData] = React.useState<IFlight[]>([]);
+  const [flights, setFlights] = React.useState<IFlight[]>([]);
   const [airports, setAirports] = React.useState<IAirport[]>([]);
   const [selectedAirport, setSelectedAirport] = React.useState<
     IAirport | undefined
+  >(undefined);
+  const [selectedFlight, setSelectedFlight] = React.useState<
+    IFlight | undefined
   >(undefined);
 
   React.useEffect(() => {
@@ -108,16 +115,19 @@ export default function App() {
   }, [airports]);
 
   React.useEffect(() => {
+    if (!selectedAirport) {
+      return;
+    }
     axios
       .get(
-        "https://ny0tqhxb45.execute-api.us-east-1.amazonaws.com/getFlights",
+        "https://g0bi5gtpef.execute-api.us-east-1.amazonaws.com/getFlights",
         {
           params: {
-            airportCode: "HOO",
+            airportCode: selectedAirport.airportCode,
           },
         },
       )
-      .then((response) => setData(response.data));
+      .then((response) => setFlights(response.data));
   }, [selectedAirport]);
 
   React.useEffect(() => {
@@ -125,14 +135,29 @@ export default function App() {
       return;
     }
     axios
-      .get("https://ny0tqhxb45.execute-api.us-east-1.amazonaws.com/getAirports")
+      .get("https://g0bi5gtpef.execute-api.us-east-1.amazonaws.com/getAirports")
       .then((response) => setAirports(response.data));
   }, []);
 
-  const averageLove = parseInt(_.mean(data.map((row) => row.love)).toFixed(0));
-
   return (
     <div className="App">
+      <Modal
+        title={`Flight ${selectedFlight?.flightCode}`}
+        open={!!selectedFlight}
+        onCancel={() => setSelectedFlight(undefined)}
+        footer={null}
+      >
+        <div>
+          {" "}
+          <GaugeRow
+            data={{
+              mood: selectedFlight?.sensorData.mood ?? 0,
+              tiredness: selectedFlight?.sensorData.tiredness ?? 0,
+              love: selectedFlight?.sensorData.love ?? 0,
+            }}
+          />
+        </div>
+      </Modal>
       <div className="margin">
         <div className="header">
           <Select
@@ -151,51 +176,40 @@ export default function App() {
           </Select>
           <div className="header-row">
             <div className="header-airport-name">{`${selectedAirport?.location} ${selectedAirport?.suffix}`}</div>
-            <div className="header-gauges">
-              <Gauge
-                name="Mood"
-                value={parseFloat(
-                  _.mean(data.map((row) => row.mood)).toFixed(0),
-                )}
-                color={INDICATOR_COLORS[INDICATORS.mood]}
-              />
-              <Gauge
-                name="Tiredness"
-                value={parseFloat(
-                  _.mean(data.map((row) => row.tiredness)).toFixed(0),
-                )}
-                color={INDICATOR_COLORS[INDICATORS.tiredness]}
-              />
-              <div className="gauge">
-                <div className="gauge-name">{"Love"}</div>
-                {_.range(MAX_LOVE)
-                  .slice()
-                  .reverse()
-                  .map((i) => (
-                    <div
-                      style={{
-                        fontSize: 21,
-                        opacity: i < averageLove ? 1 : 0.3,
-                        textAlign: "center",
-                        lineHeight: 1.3,
-                      }}
-                    >
-                      {LOVE_SYMBOL}
-                    </div>
-                  ))}
-              </div>
-            </div>
+            <GaugeRow
+              data={{
+                mood: parseFloat(
+                  _.mean(flights.map((row) => row.sensorData.mood)).toFixed(0),
+                ),
+                tiredness: parseFloat(
+                  _.mean(
+                    flights.map((row) => row.sensorData.tiredness),
+                  ).toFixed(0),
+                ),
+                love: parseInt(
+                  _.mean(flights.map((row) => row.sensorData.love)).toFixed(0),
+                ),
+              }}
+            />
           </div>
         </div>
         <div className="content">
-          {data.length > 0 ? (
+          {flights.length > 0 ? (
             <Table
               columns={columns}
-              dataSource={data.map((row) => ({
+              dataSource={flights.map((row) => ({
                 ...row,
+                ...row.sensorData,
                 key: row.flightCode,
               }))}
               size="small"
+              onRow={(record) => {
+                return {
+                  onClick: () => {
+                    setSelectedFlight(record);
+                  },
+                };
+              }}
             />
           ) : (
             <div className="centered">
