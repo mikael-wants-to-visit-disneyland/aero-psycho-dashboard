@@ -9,10 +9,19 @@ import _ from "lodash";
 import Gauge from "./components/Gauge";
 import axios from "axios";
 import { Option } from "antd/lib/mentions";
-import heartImage from "./heart.svg";
 
 const LOVE_SYMBOL = "💗";
 const MAX_LOVE = 3;
+
+const INDICATORS = {
+  mood: "mood",
+  tiredness: "tiredness",
+  love: "love",
+} as const;
+const INDICATOR_COLORS = {
+  [INDICATORS.mood]: "#10f000",
+  [INDICATORS.tiredness]: "#177fff",
+};
 
 export interface IFlight {
   flightCode: string;
@@ -58,7 +67,12 @@ const columns = [
     dataIndex: "mood",
     key: "mood",
     render: (value: number) => (
-      <Progress percent={value} size="small" showInfo={false} />
+      <Progress
+        percent={value}
+        size="small"
+        showInfo={false}
+        strokeColor={INDICATOR_COLORS[INDICATORS.mood]}
+      />
     ),
   },
   {
@@ -66,7 +80,12 @@ const columns = [
     dataIndex: "tiredness",
     key: "tiredness",
     render: (value: number) => (
-      <Progress percent={value} size="small" showInfo={false} />
+      <Progress
+        percent={value}
+        size="small"
+        showInfo={false}
+        strokeColor={INDICATOR_COLORS[INDICATORS.tiredness]}
+      />
     ),
   },
   {
@@ -138,12 +157,14 @@ export default function App() {
                 value={parseFloat(
                   _.mean(data.map((row) => row.mood)).toFixed(0),
                 )}
+                color={INDICATOR_COLORS[INDICATORS.mood]}
               />
               <Gauge
                 name="Tiredness"
                 value={parseFloat(
                   _.mean(data.map((row) => row.tiredness)).toFixed(0),
                 )}
+                color={INDICATOR_COLORS[INDICATORS.tiredness]}
               />
               <div className="gauge">
                 <div className="gauge-name">{"Love"}</div>
