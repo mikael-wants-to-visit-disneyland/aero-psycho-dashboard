@@ -9,8 +9,10 @@ import _ from "lodash";
 import Gauge from "./components/Gauge";
 import axios from "axios";
 import { Option } from "antd/lib/mentions";
+import heartImage from "./heart.svg";
 
 const LOVE_SYMBOL = "💗";
+const MAX_LOVE = 3;
 
 export interface IFlight {
   flightCode: string;
@@ -108,6 +110,8 @@ export default function App() {
       .then((response) => setAirports(response.data));
   }, []);
 
+  const averageLove = parseInt(_.mean(data.map((row) => row.love)).toFixed(0));
+
   return (
     <div className="App">
       <div className="margin">
@@ -141,6 +145,24 @@ export default function App() {
                   _.mean(data.map((row) => row.tiredness)).toFixed(0),
                 )}
               />
+              <div className="gauge">
+                <div className="gauge-name">{"Love"}</div>
+                {_.range(MAX_LOVE)
+                  .slice()
+                  .reverse()
+                  .map((i) => (
+                    <div
+                      style={{
+                        fontSize: 21,
+                        opacity: i < averageLove ? 1 : 0.3,
+                        textAlign: "center",
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {LOVE_SYMBOL}
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
