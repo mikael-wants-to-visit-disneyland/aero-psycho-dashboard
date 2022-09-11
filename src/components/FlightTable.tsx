@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Progress, Table } from "antd";
+import { Progress, Table, Tooltip } from "antd";
 import {
   IAirport,
   IFlight,
@@ -39,9 +39,11 @@ export default function FlightTable(props: IFlightTableProps) {
               love: 1,
             },
           ) && (
-            <div style={{ width: 0, overflow: "visible" }}>
-              <div className="flight-warning" />
-            </div>
+            <Tooltip placement="left" title="Critically bad. 😞">
+              <div style={{ width: 0, overflow: "visible" }}>
+                <div className="flight-warning" />
+              </div>
+            </Tooltip>
           )}
           {code}
         </div>
