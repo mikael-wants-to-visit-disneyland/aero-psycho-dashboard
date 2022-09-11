@@ -1,0 +1,29 @@
+.seat-visualization {
+  width: 100%;
+  height: 115px;
+  border-radius: 17%;
+  box-shadow: 10px 10px 20px #cccccc;
+  margin-top: 30px;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  padding-left: 6%;
+  padding-right: 6%;
+  display: flex;
+  flex-direction: column;
+}
+
+.seat-visualization-row {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.seat-visualization-seat {
+  width: 2%;
+  height: 100%;
+  background: burlywood;
+  border-radius: 5px;
+}

@@ -9,9 +9,11 @@ import _ from "lodash";
 import axios from "axios";
 import { Option } from "antd/lib/mentions";
 import GaugeRow from "./components/GaugeRow";
+import SeatVisualization from "./components/SeatVisualization";
 
 export const LOVE_SYMBOL = "💗";
 export const MAX_LOVE = 3;
+const FLIGHT_MODAL_WIDTH = "70%";
 
 export const INDICATORS = {
   mood: "mood",
@@ -146,9 +148,9 @@ export default function App() {
         open={!!selectedFlight}
         onCancel={() => setSelectedFlight(undefined)}
         footer={null}
+        width={FLIGHT_MODAL_WIDTH}
       >
         <div>
-          {" "}
           <GaugeRow
             data={{
               mood: selectedFlight?.sensorData.mood ?? 0,
@@ -156,6 +158,7 @@ export default function App() {
               love: selectedFlight?.sensorData.love ?? 0,
             }}
           />
+          <SeatVisualization />
         </div>
       </Modal>
       <div className="margin">
