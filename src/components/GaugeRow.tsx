@@ -14,11 +14,13 @@ export default function GaugeRow(props: IGaugeProps) {
         value={props.data.mood}
         color={INDICATOR_CONFIGS.mood.color}
       />
+      <div style={{ marginLeft: 23 }} />
       <Gauge
         name="Tiredness"
         value={props.data.tiredness}
         color={INDICATOR_CONFIGS.tiredness.color}
       />
+      <div style={{ marginLeft: 28 }} />
       <div className="gauge">
         <div className="gauge-name">{"Love"}</div>
         {_.range(MAX_LOVE)

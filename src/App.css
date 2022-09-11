@@ -35,7 +35,6 @@
 .gauge {
   display: flex;
   flex-direction: column;
-  margin-left: 23px;
 }
 
 .gauge .ant-progress-text {

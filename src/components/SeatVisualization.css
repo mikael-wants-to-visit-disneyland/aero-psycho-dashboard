@@ -3,7 +3,7 @@
   height: 122px;
   border-radius: 17%;
   box-shadow: 10px 10px 20px #cccccc;
-  margin-top: 30px;
+  margin-top: 15px;
   padding-top: 1%;
   padding-bottom: 1%;
   padding-left: 6%;
@@ -25,7 +25,6 @@
 .seat-visualization-seat {
   width: 2%;
   height: 100%;
-  background: burlywood;
   border-radius: 5px;
   box-shadow: 0px 0px 10px #d6d6d6;
   border: 2px solid white;

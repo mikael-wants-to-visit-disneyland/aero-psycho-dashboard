@@ -4,7 +4,7 @@ import * as React from "react";
 
 import "antd/dist/antd.css";
 //import { Table, Tag, Progress, Spin } from "antd";
-import { Table, Progress, Spin, Select, Modal } from "antd";
+import { Table, Progress, Spin, Select, Modal, Tabs } from "antd";
 import _ from "lodash";
 import axios from "axios";
 import { Option } from "antd/lib/mentions";
@@ -22,6 +22,7 @@ export interface IndicatorConfig {
   color: string;
   max: number;
 }
+// TODO: configs do not belong in the frontend; move this to the db.
 export const INDICATOR_CONFIGS: Record<Indicator, IndicatorConfig> = {
   mood: { color: "#10f000", max: 100 },
   tiredness: { color: "#177fff", max: 100 },
@@ -107,8 +108,8 @@ export default function App() {
   const [selectedFlight, setSelectedFlight] = React.useState<
     IFlight | undefined
   >(undefined);
-  const [selectedIndicator, setSelectedIndicator] =
-    React.useState<Indicator>("mood");
+  // const [selectedIndicator, setSelectedIndicator] =
+  //   React.useState<Indicator>("mood");
 
   React.useEffect(() => {
     !selectedAirport && setSelectedAirport(airports[0]);
@@ -156,13 +157,22 @@ export default function App() {
               love: selectedFlight?.sensorData.love ?? 0,
             }}
           />
-          <SeatVisualization
-            color={INDICATOR_CONFIGS.mood.color}
-            probability={
-              (selectedFlight?.sensorData[selectedIndicator] ?? 0) /
-              INDICATOR_CONFIGS[selectedIndicator].max
-            }
-          />
+          <Tabs defaultActiveKey="1">
+            {INDICATORS.map((indicator) => (
+              <Tabs.TabPane
+                tab={indicator.charAt(0).toUpperCase() + indicator.slice(1)}
+                key={indicator}
+              >
+                <SeatVisualization
+                  color={INDICATOR_CONFIGS[indicator].color}
+                  probability={
+                    (selectedFlight?.sensorData[indicator] ?? 0) /
+                    INDICATOR_CONFIGS[indicator].max
+                  }
+                />
+              </Tabs.TabPane>
+            ))}
+          </Tabs>
         </div>
       </Modal>
       <div className="margin">
