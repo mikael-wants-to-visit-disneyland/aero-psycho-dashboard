@@ -11,10 +11,10 @@ import { Option } from "antd/lib/mentions";
 import GaugeRow from "./components/GaugeRow";
 import SeatVisualization from "./components/SeatVisualization";
 import Gauge from "./components/Gauge";
+import FlightModal from "./components/FlightModal";
 
 export const LOVE_SYMBOL = "💗";
 export const MAX_LOVE = 3;
-const FLIGHT_MODAL_WIDTH = "70%";
 
 export const INDICATORS = ["mood", "tiredness", "love"];
 export type Indicator = typeof INDICATORS[number];
@@ -141,6 +141,11 @@ export default function App() {
       .then((response) => setAirports(response.data));
   }, []);
 
+  const getMeanMetric = (indicator: Indicator) =>
+    parseInt(
+      _.mean(flights.map((row) => row.sensorData[indicator])).toFixed(0),
+    );
+
   return (
     <div className="App">
       <Modal
@@ -163,61 +168,12 @@ export default function App() {
           ))}
         </div>
       </Modal>
-      <Modal
-        title={`Flight ${selectedFlight?.flightCode}`}
-        open={!!selectedFlight}
-        onCancel={() => setSelectedFlight(undefined)}
-        footer={null}
-        width={FLIGHT_MODAL_WIDTH}
-      >
-        <div>
-          <Tabs defaultActiveKey="1">
-            {INDICATORS.map((indicator) => (
-              <Tabs.TabPane
-                tab={indicator.charAt(0).toUpperCase() + indicator.slice(1)}
-                key={indicator}
-              >
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <SeatVisualization
-                    color={INDICATOR_CONFIGS[indicator].color}
-                    probability={
-                      (selectedFlight?.sensorData[indicator] ?? 0) /
-                      INDICATOR_CONFIGS[indicator].max
-                    }
-                  />
-                  <div style={{ width: 20 }} />
-                  <Gauge
-                    value={parseInt(
-                      (
-                        100 *
-                          ((selectedFlight?.sensorData[indicator] ?? 0) /
-                            INDICATOR_CONFIGS[indicator].max) ?? 0
-                      ).toFixed(0),
-                    )}
-                    color={INDICATOR_CONFIGS[indicator].color}
-                  />
-                </div>
-              </Tabs.TabPane>
-            ))}
-          </Tabs>
-        </div>
-      </Modal>
+      <FlightModal
+        flight={selectedFlight}
+        closeCallback={() => setSelectedFlight(undefined)}
+      />
       <div className="margin">
         <div className="header">
-          {/* <Select
-            value={selectedAirport?.airportCode}
-            optionFilterProp="children"
-            onChange={(code) =>
-              setSelectedAirport(airports.find((a) => a.airportCode === code))
-            }
-          >
-            {airports.map((a) => (
-              <Option
-                key={a.airportCode}
-                value={a.airportCode}
-              >{`${a.location} ${a.suffix}`}</Option>
-            ))}
-          </Select> */}
           <div className="header-row">
             <div
               className="header-airport-name"
@@ -225,17 +181,9 @@ export default function App() {
             >{`${selectedAirport?.location} ${selectedAirport?.suffix}`}</div>
             <GaugeRow
               data={{
-                mood: parseFloat(
-                  _.mean(flights.map((row) => row.sensorData.mood)).toFixed(0),
-                ),
-                tiredness: parseFloat(
-                  _.mean(
-                    flights.map((row) => row.sensorData.tiredness),
-                  ).toFixed(0),
-                ),
-                love: parseInt(
-                  _.mean(flights.map((row) => row.sensorData.love)).toFixed(0),
-                ),
+                mood: getMeanMetric("mood"),
+                tiredness: getMeanMetric("tiredness"),
+                love: getMeanMetric("love"),
               }}
             />
           </div>
