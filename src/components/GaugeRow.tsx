@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  INDICATORS,
-  INDICATOR_COLORS,
-  ISensorData,
-  LOVE_SYMBOL,
-  MAX_LOVE,
-} from "src/App";
+import { INDICATOR_CONFIGS, ISensorData, LOVE_SYMBOL, MAX_LOVE } from "src/App";
 import Gauge from "./Gauge";
 
 export interface IGaugeProps {
@@ -18,12 +12,12 @@ export default function GaugeRow(props: IGaugeProps) {
       <Gauge
         name="Mood"
         value={props.data.mood}
-        color={INDICATOR_COLORS[INDICATORS.mood]}
+        color={INDICATOR_CONFIGS.mood.color}
       />
       <Gauge
         name="Tiredness"
         value={props.data.tiredness}
-        color={INDICATOR_COLORS[INDICATORS.tiredness]}
+        color={INDICATOR_CONFIGS.tiredness.color}
       />
       <div className="gauge">
         <div className="gauge-name">{"Love"}</div>

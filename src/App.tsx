@@ -17,9 +17,15 @@ const FLIGHT_MODAL_WIDTH = "70%";
 
 export const INDICATORS = ["mood", "tiredness", "love"];
 export type Indicator = typeof INDICATORS[number];
-export const INDICATOR_COLORS: Record<Indicator, string> = {
-  mood: "#10f000",
-  tiredness: "#177fff",
+
+export interface IndicatorConfig {
+  color: string;
+  max: number;
+}
+export const INDICATOR_CONFIGS: Record<Indicator, IndicatorConfig> = {
+  mood: { color: "#10f000", max: 100 },
+  tiredness: { color: "#177fff", max: 100 },
+  love: { color: "#ff3ba7", max: 3 },
 };
 
 export interface IFlight {
@@ -48,11 +54,6 @@ const columns = [
     dataIndex: "flightCode",
     key: "flightCode",
   },
-  // {
-  //   title: 'Departure time',
-  //   dataIndex: 'estimatedDepartureTime',
-  //   key: 'estimatedDepartureTime',
-  // },
   {
     title: "Arrival time",
     dataIndex: "estimatedArrivalTime",
@@ -72,7 +73,7 @@ const columns = [
         percent={value}
         size="small"
         showInfo={false}
-        strokeColor={INDICATOR_COLORS["mood"]}
+        strokeColor={INDICATOR_CONFIGS.mood.color}
       />
     ),
   },
@@ -85,7 +86,7 @@ const columns = [
         percent={value}
         size="small"
         showInfo={false}
-        strokeColor={INDICATOR_COLORS["tiredness"]}
+        strokeColor={INDICATOR_CONFIGS.tiredness.color}
       />
     ),
   },
@@ -156,8 +157,11 @@ export default function App() {
             }}
           />
           <SeatVisualization
-            color={INDICATOR_COLORS["mood"]}
-            probability={selectedFlight?.sensorData[selectedIndicator] ?? 0}
+            color={INDICATOR_CONFIGS.mood.color}
+            probability={
+              (selectedFlight?.sensorData[selectedIndicator] ?? 0) /
+              INDICATOR_CONFIGS[selectedIndicator].max
+            }
           />
         </div>
       </Modal>

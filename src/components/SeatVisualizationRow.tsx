@@ -1,4 +1,5 @@
 import * as React from "react";
+import { hexToRGB } from "src/util";
 import "./SeatVisualization.css";
 
 export interface ISeatVisualizationRowProps {
@@ -17,7 +18,10 @@ export default function SeatVisualizationRow(
           key={i}
           className="seat-visualization-seat"
           style={{
-            background: `rgba(100, 100, 3, ${Math.random() * 0.5})`,
+            background: hexToRGB(
+              props.color,
+              Math.random() * props.probability,
+            ),
           }}
         />
       ))}
