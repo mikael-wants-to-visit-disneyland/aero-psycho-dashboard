@@ -30,6 +30,13 @@
 .header-airport-name {
   font-size: 33px;
   opacity: 0.65;
+  transition: 0.5s;
+}
+
+.header-airport-name:hover {
+  opacity: 0.4;
+  transition: 0.5s;
+  cursor: pointer;
 }
 
 .App {
@@ -95,4 +102,5 @@
 .airport-selection-modal-airport-name:hover {
   opacity: 0.5;
   transition: 0.5s;
+  cursor: pointer;
 }
