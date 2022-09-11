@@ -101,6 +101,8 @@ const columns = [
 ];
 
 export default function App() {
+  const [airportSelectionModal, setAirportSelectionModal] =
+    React.useState<boolean>(false);
   const [flights, setFlights] = React.useState<IFlight[]>([]);
   const [airports, setAirports] = React.useState<IAirport[]>([]);
   const [selectedAirport, setSelectedAirport] = React.useState<
@@ -142,6 +144,26 @@ export default function App() {
   return (
     <div className="App">
       <Modal
+        title="Select airport"
+        open={airportSelectionModal}
+        onCancel={() => setAirportSelectionModal(false)}
+        footer={null}
+        width={"60%"}
+        className="airport-selection-modal"
+      >
+        <div className="airport-selection-modal-content">
+          {airports.map((airport) => (
+            <div
+              className="airport-selection-modal-airport-name"
+              onClick={() => {
+                setSelectedAirport(airport);
+                setAirportSelectionModal(false);
+              }}
+            >{`${airport?.location} ${airport?.suffix}`}</div>
+          ))}
+        </div>
+      </Modal>
+      <Modal
         title={`Flight ${selectedFlight?.flightCode}`}
         open={!!selectedFlight}
         onCancel={() => setSelectedFlight(undefined)}
@@ -182,7 +204,7 @@ export default function App() {
       </Modal>
       <div className="margin">
         <div className="header">
-          <Select
+          {/* <Select
             value={selectedAirport?.airportCode}
             optionFilterProp="children"
             onChange={(code) =>
@@ -195,9 +217,12 @@ export default function App() {
                 value={a.airportCode}
               >{`${a.location} ${a.suffix}`}</Option>
             ))}
-          </Select>
+          </Select> */}
           <div className="header-row">
-            <div className="header-airport-name">{`${selectedAirport?.location} ${selectedAirport?.suffix}`}</div>
+            <div
+              className="header-airport-name"
+              onClick={() => setAirportSelectionModal(true)}
+            >{`${selectedAirport?.location} ${selectedAirport?.suffix}`}</div>
             <GaugeRow
               data={{
                 mood: parseFloat(
