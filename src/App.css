@@ -7,8 +7,13 @@
 }
 
 .margin {
-  width: 70%;
-  height: 100%;
+  width: 60%;
+  min-width: 620px;
+  padding-left: 3%;
+  padding-right: 3%;
+  height: fit-content;
+  background: rgba(255, 255, 255, 0.93);
+  box-shadow: 0 0 70px rgba(0, 0, 0, 0.1);
 }
 
 .header {
