@@ -13,6 +13,16 @@ const columns = [
     title: "Flight",
     dataIndex: "flightCode",
     key: "flightCode",
+    render: (code: string) => (
+      <div
+        style={{ display: "flex", overflow: "visible", alignItems: "center" }}
+      >
+        <div style={{ width: 0, overflow: "visible" }}>
+          <div className="flight-warning" />
+        </div>
+        {code}
+      </div>
+    ),
   },
   {
     title: "Arrival time",
