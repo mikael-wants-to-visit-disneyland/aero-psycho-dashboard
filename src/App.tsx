@@ -10,6 +10,7 @@ import axios from "axios";
 import { Option } from "antd/lib/mentions";
 import GaugeRow from "./components/GaugeRow";
 import SeatVisualization from "./components/SeatVisualization";
+import Gauge from "./components/Gauge";
 
 export const LOVE_SYMBOL = "💗";
 export const MAX_LOVE = 3;
@@ -150,26 +151,26 @@ export default function App() {
         width={FLIGHT_MODAL_WIDTH}
       >
         <div>
-          <GaugeRow
-            data={{
-              mood: selectedFlight?.sensorData.mood ?? 0,
-              tiredness: selectedFlight?.sensorData.tiredness ?? 0,
-              love: selectedFlight?.sensorData.love ?? 0,
-            }}
-          />
           <Tabs defaultActiveKey="1">
             {INDICATORS.map((indicator) => (
               <Tabs.TabPane
                 tab={indicator.charAt(0).toUpperCase() + indicator.slice(1)}
                 key={indicator}
               >
-                <SeatVisualization
-                  color={INDICATOR_CONFIGS[indicator].color}
-                  probability={
-                    (selectedFlight?.sensorData[indicator] ?? 0) /
-                    INDICATOR_CONFIGS[indicator].max
-                  }
-                />
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <SeatVisualization
+                    color={INDICATOR_CONFIGS[indicator].color}
+                    probability={
+                      (selectedFlight?.sensorData[indicator] ?? 0) /
+                      INDICATOR_CONFIGS[indicator].max
+                    }
+                  />
+                  <div style={{ width: 20 }} />
+                  <Gauge
+                    value={selectedFlight?.sensorData[indicator] ?? 0}
+                    color={INDICATOR_CONFIGS[indicator].color}
+                  />
+                </div>
               </Tabs.TabPane>
             ))}
           </Tabs>
