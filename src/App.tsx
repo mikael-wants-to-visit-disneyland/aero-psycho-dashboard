@@ -63,8 +63,8 @@ const columns = [
   },
   {
     title: "Origin",
-    dataIndex: "originAirportCode",
-    key: "originAirportCode",
+    dataIndex: "departureAirport",
+    key: "departureAirport",
   },
   {
     title: "Mood",
@@ -109,8 +109,6 @@ export default function App() {
   const [selectedFlight, setSelectedFlight] = React.useState<
     IFlight | undefined
   >(undefined);
-  // const [selectedIndicator, setSelectedIndicator] =
-  //   React.useState<Indicator>("mood");
 
   React.useEffect(() => {
     !selectedAirport && setSelectedAirport(airports[0]);
@@ -167,7 +165,13 @@ export default function App() {
                   />
                   <div style={{ width: 20 }} />
                   <Gauge
-                    value={selectedFlight?.sensorData[indicator] ?? 0}
+                    value={parseInt(
+                      (
+                        100 *
+                          ((selectedFlight?.sensorData[indicator] ?? 0) /
+                            INDICATOR_CONFIGS[indicator].max) ?? 0
+                      ).toFixed(0),
+                    )}
                     color={INDICATOR_CONFIGS[indicator].color}
                   />
                 </div>
@@ -218,6 +222,11 @@ export default function App() {
               dataSource={flights.map((row) => ({
                 ...row,
                 ...row.sensorData,
+                departureAirport: `${
+                  airports.find(
+                    (a) => a.airportCode === row.departureAirportCode,
+                  )?.location
+                } (${row.departureAirportCode})`,
                 key: row.flightCode,
               }))}
               size="small"
