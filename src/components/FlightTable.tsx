@@ -1,6 +1,12 @@
 import * as React from "react";
 import { Progress, Table } from "antd";
-import { IAirport, IFlight, INDICATOR_CONFIGS, LOVE_SYMBOL } from "src/App";
+import {
+  IAirport,
+  IFlight,
+  INDICATOR_CONFIGS,
+  ISensorData,
+  LOVE_SYMBOL,
+} from "src/App";
 
 export interface IFlightTableProps {
   flights: IFlight[];
@@ -8,67 +14,83 @@ export interface IFlightTableProps {
   rowClickCallback: (f: IFlight) => void;
 }
 
-const columns = [
-  {
-    title: "Flight",
-    dataIndex: "flightCode",
-    key: "flightCode",
-    render: (code: string) => (
-      <div
-        style={{ display: "flex", overflow: "visible", alignItems: "center" }}
-      >
-        <div style={{ width: 0, overflow: "visible" }}>
-          <div className="flight-warning" />
-        </div>
-        {code}
-      </div>
-    ),
-  },
-  {
-    title: "Arrival time",
-    dataIndex: "estimatedArrivalTime",
-    key: "estimatedArrivalTime",
-  },
-  {
-    title: "Origin",
-    dataIndex: "departureAirport",
-    key: "departureAirport",
-  },
-  {
-    title: "Mood",
-    dataIndex: "mood",
-    key: "mood",
-    render: (value: number) => (
-      <Progress
-        percent={value}
-        size="small"
-        showInfo={false}
-        strokeColor={INDICATOR_CONFIGS.mood.color}
-      />
-    ),
-  },
-  {
-    title: "Tiredness",
-    dataIndex: "tiredness",
-    key: "tiredness",
-    render: (value: number) => (
-      <Progress
-        percent={value}
-        size="small"
-        showInfo={false}
-        strokeColor={INDICATOR_CONFIGS.tiredness.color}
-      />
-    ),
-  },
-  {
-    title: "Love",
-    dataIndex: "love",
-    key: "love",
-    render: (value: number) => LOVE_SYMBOL.repeat(value),
-  },
-];
+const CRITICALITY_THRESHOLD = 0.03;
+const isCriticallyBadFlight = (sensorData: ISensorData) =>
+  CRITICALITY_THRESHOLD >
+  (sensorData.mood / 100) *
+    (sensorData.tiredness / 100) *
+    ((sensorData.love + 1) / 4);
 
 export default function FlightTable(props: IFlightTableProps) {
+  const columns = [
+    {
+      title: "Flight",
+      dataIndex: "flightCode",
+      key: "flightCode",
+      render: (code: string) => (
+        <div
+          style={{ display: "flex", overflow: "visible", alignItems: "center" }}
+        >
+          {isCriticallyBadFlight(
+            props.flights.find((flight) => flight.flightCode === code)
+              ?.sensorData ?? {
+              mood: 1,
+              tiredness: 1,
+              love: 1,
+            },
+          ) && (
+            <div style={{ width: 0, overflow: "visible" }}>
+              <div className="flight-warning" />
+            </div>
+          )}
+          {code}
+        </div>
+      ),
+    },
+    {
+      title: "Arrival time",
+      dataIndex: "estimatedArrivalTime",
+      key: "estimatedArrivalTime",
+    },
+    {
+      title: "Origin",
+      dataIndex: "departureAirport",
+      key: "departureAirport",
+    },
+    {
+      title: "Mood",
+      dataIndex: "mood",
+      key: "mood",
+      render: (value: number) => (
+        <Progress
+          percent={value}
+          size="small"
+          showInfo={false}
+          strokeColor={INDICATOR_CONFIGS.mood.color}
+        />
+      ),
+    },
+    {
+      title: "Tiredness",
+      dataIndex: "tiredness",
+      key: "tiredness",
+      render: (value: number) => (
+        <Progress
+          percent={value}
+          size="small"
+          showInfo={false}
+          strokeColor={INDICATOR_CONFIGS.tiredness.color}
+        />
+      ),
+    },
+    {
+      title: "Love",
+      dataIndex: "love",
+      key: "love",
+      render: (value: number) => LOVE_SYMBOL.repeat(value),
+    },
+  ];
+
   return (
     <Table
       columns={columns}
