@@ -4,15 +4,16 @@ import * as React from "react";
 
 import "antd/dist/antd.css";
 //import { Table, Tag, Progress, Spin } from "antd";
-import { Table, Progress, Spin, Select, Modal, Tabs } from "antd";
+import { Spin, Modal } from "antd";
 import _ from "lodash";
 import axios from "axios";
-import { Option } from "antd/lib/mentions";
 import GaugeRow from "./components/GaugeRow";
-import SeatVisualization from "./components/SeatVisualization";
-import Gauge from "./components/Gauge";
 import FlightModal from "./components/FlightModal";
 import FlightTable from "./components/FlightTable";
+
+export const API_URL = "https://g0bi5gtpef.execute-api.us-east-1.amazonaws.com";
+export const FLIGHTS_ROUTE = "getFlights";
+export const AIRPORTS_ROUTE = "getAirports";
 
 export const LOVE_SYMBOL = "💗";
 export const MAX_LOVE = 3;
@@ -72,14 +73,11 @@ export default function App() {
       return;
     }
     axios
-      .get(
-        "https://g0bi5gtpef.execute-api.us-east-1.amazonaws.com/getFlights",
-        {
-          params: {
-            airportCode: selectedAirport.airportCode,
-          },
+      .get([API_URL, FLIGHTS_ROUTE].join("/"), {
+        params: {
+          airportCode: selectedAirport.airportCode,
         },
-      )
+      })
       .then((response) => setFlights(response.data));
   }, [selectedAirport]);
 
@@ -88,7 +86,7 @@ export default function App() {
       return;
     }
     axios
-      .get("https://g0bi5gtpef.execute-api.us-east-1.amazonaws.com/getAirports")
+      .get([API_URL, AIRPORTS_ROUTE].join("/"))
       .then((response) => setAirports(response.data));
   }, []);
 
