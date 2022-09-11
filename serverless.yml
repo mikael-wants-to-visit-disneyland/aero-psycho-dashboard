@@ -1,5 +1,5 @@
 ---
-service: serverless-react-boilerplate
+service: aero-psycho-dashboard
 frameworkVersion: "3"
 useDotenv: true
 variablesResolutionMode: 20210326
