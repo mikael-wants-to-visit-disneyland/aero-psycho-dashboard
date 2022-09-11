@@ -52,6 +52,11 @@ export interface ISensorData {
   [indicator: Indicator]: number;
 }
 
+const getTimeSortedFlights = (flights: IFlight[]) =>
+  _.sortBy(flights, (flight) =>
+    parseInt(flight.estimatedArrivalTime.split(":")[0].trimStart()),
+  ).reverse();
+
 export default function App() {
   const [airportSelectionModal, setAirportSelectionModal] =
     React.useState<boolean>(false);
@@ -140,7 +145,7 @@ export default function App() {
         <div className="content">
           {flights.length > 0 ? (
             <FlightTable
-              flights={flights}
+              flights={getTimeSortedFlights(flights)}
               airports={airports}
               rowClickCallback={(flight) => setSelectedFlight(flight)}
             />

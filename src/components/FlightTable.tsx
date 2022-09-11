@@ -71,6 +71,7 @@ export default function FlightTable(props: IFlightTableProps) {
         } (${row.departureAirportCode})`,
         key: row.flightCode,
       }))}
+      className="flight-table"
       size="small"
       onRow={(record) => {
         return {

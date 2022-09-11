@@ -1,7 +1,6 @@
 .App {
   width: 100vw;
   height: 100vh;
-  background: #fafafa;
   display: flex;
   justify-content: center;
 }
@@ -13,7 +12,6 @@
   padding-right: 3%;
   height: fit-content;
   background: rgba(255, 255, 255, 0.93);
-  box-shadow: 0 0 70px rgba(0, 0, 0, 0.1);
 }
 
 .header {
@@ -108,4 +106,8 @@
   opacity: 0.5;
   transition: 0.5s;
   cursor: pointer;
+}
+
+.flight-table .ant-table {
+  box-shadow: 0 25px 60px rgb(0 0 0 / 20%);
 }
