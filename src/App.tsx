@@ -12,6 +12,7 @@ import GaugeRow from "./components/GaugeRow";
 import SeatVisualization from "./components/SeatVisualization";
 import Gauge from "./components/Gauge";
 import FlightModal from "./components/FlightModal";
+import FlightTable from "./components/FlightTable";
 
 export const LOVE_SYMBOL = "💗";
 export const MAX_LOVE = 3;
@@ -49,56 +50,6 @@ export interface IAirport {
 export interface ISensorData {
   [indicator: Indicator]: number;
 }
-
-const columns = [
-  {
-    title: "Flight",
-    dataIndex: "flightCode",
-    key: "flightCode",
-  },
-  {
-    title: "Arrival time",
-    dataIndex: "estimatedArrivalTime",
-    key: "estimatedArrivalTime",
-  },
-  {
-    title: "Origin",
-    dataIndex: "departureAirport",
-    key: "departureAirport",
-  },
-  {
-    title: "Mood",
-    dataIndex: "mood",
-    key: "mood",
-    render: (value: number) => (
-      <Progress
-        percent={value}
-        size="small"
-        showInfo={false}
-        strokeColor={INDICATOR_CONFIGS.mood.color}
-      />
-    ),
-  },
-  {
-    title: "Tiredness",
-    dataIndex: "tiredness",
-    key: "tiredness",
-    render: (value: number) => (
-      <Progress
-        percent={value}
-        size="small"
-        showInfo={false}
-        strokeColor={INDICATOR_CONFIGS.tiredness.color}
-      />
-    ),
-  },
-  {
-    title: "Love",
-    dataIndex: "love",
-    key: "love",
-    render: (value: number) => LOVE_SYMBOL.repeat(value),
-  },
-];
 
 export default function App() {
   const [airportSelectionModal, setAirportSelectionModal] =
@@ -190,26 +141,10 @@ export default function App() {
         </div>
         <div className="content">
           {flights.length > 0 ? (
-            <Table
-              columns={columns}
-              dataSource={flights.map((row) => ({
-                ...row,
-                ...row.sensorData,
-                departureAirport: `${
-                  airports.find(
-                    (a) => a.airportCode === row.departureAirportCode,
-                  )?.location
-                } (${row.departureAirportCode})`,
-                key: row.flightCode,
-              }))}
-              size="small"
-              onRow={(record) => {
-                return {
-                  onClick: () => {
-                    setSelectedFlight(record);
-                  },
-                };
-              }}
+            <FlightTable
+              flights={flights}
+              airports={airports}
+              rowClickCallback={(flight) => setSelectedFlight(flight)}
             />
           ) : (
             <div className="centered">
