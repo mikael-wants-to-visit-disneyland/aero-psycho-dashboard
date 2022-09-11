@@ -33,6 +33,45 @@ We used [this](https://github.com/arabold/serverless-react-boilerplate) boilerpl
 
 **Storage**: For the same reason, since we need a database solution of massive scalability and robustness, we have used dynamoDB.
 
+## Adding items
+
+Use the following HTTP POST structure to add or modify a flight:
+
+```
+curl --request POST 'https://rgay4u24b6.execute-api.us-east-1.amazonaws.com/dev/sender' \
+     --header 'Content-Type: application/json' \
+     --data-raw '{
+  "dataType": "flight",
+  "flightCode": "HU6655",
+  "departureAirportCode": "UIO",
+  "airportCode": "BOM",
+  "date": "2022-09-10",
+  "estimatedDepartureTime": "07:55:00",
+  "estimatedArrivalTime": "18:42:00",
+  "sensorData": {
+	  "mood": 68,
+	  "tiredness": 24,
+	  "love": 1
+  }
+}'
+```
+
+Use this to add or modify an airport:
+
+```
+curl --request POST 'https://rgay4u24b6.execute-api.us-east-1.amazonaws.com/dev/sender' \
+     --header 'Content-Type: application/json' \
+     --data-raw '{
+  "dataType": "airport",
+  "airportCode": "UIO",
+  "location": "Atlanta",
+  "suffix": "Hartsfield-Jackson",
+  "flightCode": "test3"
+}'
+```
+
+Note that a unique "flightCode" is unfortunately currently needed for the airport, even though it should be irrelevant. This is due to a badly chosen key schema, and will be fixed soon.
+
 ## Disclaimer
 
 This project exhibits just one possible, relatively simple architecture for IoT applications, and is not necessarily the best in all respects. AWS provides a rich array of services to choose from depending on your use case, including their dedicated solution, IoT Core.
