@@ -1,4 +1,4 @@
-# xxx
+# Aero-psycho dashboard
 
 An isomorphic React app with serverless architecture, alongside a serverless API, to showcase these technologies for an IoT use case.
 
@@ -17,7 +17,7 @@ This project is an MVP for the second user group. We aim to give airports the ab
 
 ## Architecture
 
-<img src="architecture.png" width="400"/>
+<img src="architecture.png" width="600"/>
 
 ### App
 
