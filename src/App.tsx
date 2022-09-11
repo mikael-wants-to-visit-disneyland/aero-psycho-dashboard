@@ -15,14 +15,11 @@ export const LOVE_SYMBOL = "💗";
 export const MAX_LOVE = 3;
 const FLIGHT_MODAL_WIDTH = "70%";
 
-export const INDICATORS = {
-  mood: "mood",
-  tiredness: "tiredness",
-  love: "love",
-} as const;
-export const INDICATOR_COLORS = {
-  [INDICATORS.mood]: "#10f000",
-  [INDICATORS.tiredness]: "#177fff",
+export const INDICATORS = ["mood", "tiredness", "love"];
+export type Indicator = typeof INDICATORS[number];
+export const INDICATOR_COLORS: Record<Indicator, string> = {
+  mood: "#10f000",
+  tiredness: "#177fff",
 };
 
 export interface IFlight {
@@ -42,9 +39,7 @@ export interface IAirport {
 }
 
 export interface ISensorData {
-  mood: number;
-  tiredness: number;
-  love: number;
+  [indicator: Indicator]: number;
 }
 
 const columns = [
@@ -77,7 +72,7 @@ const columns = [
         percent={value}
         size="small"
         showInfo={false}
-        strokeColor={INDICATOR_COLORS[INDICATORS.mood]}
+        strokeColor={INDICATOR_COLORS["mood"]}
       />
     ),
   },
@@ -90,7 +85,7 @@ const columns = [
         percent={value}
         size="small"
         showInfo={false}
-        strokeColor={INDICATOR_COLORS[INDICATORS.tiredness]}
+        strokeColor={INDICATOR_COLORS["tiredness"]}
       />
     ),
   },
@@ -111,6 +106,8 @@ export default function App() {
   const [selectedFlight, setSelectedFlight] = React.useState<
     IFlight | undefined
   >(undefined);
+  const [selectedIndicator, setSelectedIndicator] =
+    React.useState<Indicator>("mood");
 
   React.useEffect(() => {
     !selectedAirport && setSelectedAirport(airports[0]);
@@ -158,7 +155,10 @@ export default function App() {
               love: selectedFlight?.sensorData.love ?? 0,
             }}
           />
-          <SeatVisualization />
+          <SeatVisualization
+            color={INDICATOR_COLORS["mood"]}
+            probability={selectedFlight?.sensorData[selectedIndicator] ?? 0}
+          />
         </div>
       </Modal>
       <div className="margin">
