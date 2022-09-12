@@ -18,7 +18,7 @@ const CRITICALITY_THRESHOLD = 0.03;
 const isCriticallyBadFlight = (sensorData: ISensorData) =>
   CRITICALITY_THRESHOLD >
   (sensorData.mood / 100) *
-    (sensorData.tiredness / 100) *
+    (1 - sensorData.tiredness / 100) *
     ((sensorData.love + 1) / 4);
 
 export default function FlightTable(props: IFlightTableProps) {

@@ -10,6 +10,7 @@ import axios from "axios";
 import GaugeRow from "./components/GaugeRow";
 import FlightModal from "./components/FlightModal";
 import FlightTable from "./components/FlightTable";
+import moment from "moment";
 
 export const API_URL = "https://g0bi5gtpef.execute-api.us-east-1.amazonaws.com";
 export const FLIGHTS_ROUTE = "getFlights";
@@ -54,7 +55,7 @@ export interface ISensorData {
 
 const getTimeSortedFlights = (flights: IFlight[]) =>
   _.sortBy(flights, (flight) =>
-    parseInt(flight.estimatedArrivalTime.split(":")[0].trimStart()),
+    moment(flight.estimatedArrivalTime, "HH:mm:ss").toDate(),
   ).reverse();
 
 export default function App() {
