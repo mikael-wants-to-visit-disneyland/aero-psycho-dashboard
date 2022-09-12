@@ -27,13 +27,15 @@ We used [this](https://github.com/arabold/serverless-react-boilerplate) boilerpl
 
 ### API
 
-**Deployment**: The great variability of the intensity of air travel over a 24-cycle as well as over a year suggests that we should go for a lambda-based solution for the API too.
+**Deployment**: The great variability of the intensity of air travel over a 24-cycle as well as over a year suggests that we should go for a serverless solution for the API too.
 
-**Message handling**: We also have to be able to deal with a massive volume of flight updates, ensuring that their order is not messed up, and that nothing is lost. As such, we have gone for AWS Simple Queue Service to manage our queue of flight updates. In other words, our API constitutes a webhook.
+**Message handling**: We also have to be able to deal with a massive volume of flight updates, ensuring that their order is not messed up, and that nothing is lost. We have gone for AWS Simple Queue Service to manage our queue of flight updates. In other words, our API constitutes a webhook.
 
-**Storage**: For the same reason, since we need a database solution of massive scalability and robustness, we have used dynamoDB.
+**Storage**: For the same reason, since we need a database solution of massive scalability and robustness, dynamoDB is our choice.
 
-## Adding items
+In summary, all flight updates are sent by http to the _sender_ lambda, which throws them onto our queue in SQS, from where they are in due time passed into our _receiver_ lambda and stored in dynamoDB. Our app then requests the items by the API's _getFlights_ or _getAirports_ lambda.
+
+## Adding / updating items
 
 Use the following HTTP POST structure to add or modify a flight:
 
@@ -71,6 +73,15 @@ curl --request POST 'https://rgay4u24b6.execute-api.us-east-1.amazonaws.com/dev/
 ```
 
 Note that a unique "flightCode" is unfortunately currently needed for the airport, even though it should be irrelevant. This is due to a badly chosen key schema, and will be fixed soon.
+
+## Todo
+
+If you would like to contribute, these would be a good place to start from:
+
+- Adding authentication, using e.g., AWS Cognito.
+- Storing the individual seats' metrics instead of the average. And should support any seating configuration.
+- It could be valuable to show "global" metrics too from the plane, such as noise level, air pressure or air pollution.
+- Currently the flights are sorted by the arrival time. The problem is that if a flight arrives after midnight, it will be thrown at the bottom of the table, so should sort by both date and time, or replace the two by datetime in the db.
 
 ## Disclaimer
 
