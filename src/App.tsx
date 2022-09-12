@@ -137,7 +137,11 @@ export default function App() {
             <div
               className="header-airport-name"
               onClick={() => setAirportSelectionModal(true)}
-            >{`${selectedAirport?.location} ${selectedAirport?.suffix}`}</div>
+            >
+              {selectedAirport
+                ? `${selectedAirport?.location} ${selectedAirport?.suffix}`
+                : ""}
+            </div>
             <GaugeRow
               data={{
                 mood: getMeanMetric("mood"),
