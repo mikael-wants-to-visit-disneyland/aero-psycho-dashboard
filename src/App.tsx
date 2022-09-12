@@ -3,7 +3,6 @@ import "./App.css";
 import * as React from "react";
 
 import "antd/dist/antd.css";
-//import { Table, Tag, Progress, Spin } from "antd";
 import { Spin, Modal } from "antd";
 import _ from "lodash";
 import axios from "axios";
@@ -57,6 +56,11 @@ const getTimeSortedFlights = (flights: IFlight[]) =>
   _.sortBy(flights, (flight) =>
     moment(flight.estimatedArrivalTime, "HH:mm:ss").toDate(),
   ).reverse();
+
+const addMinutes = (date: Date, minutes: number) => {
+  date.setMinutes(date.getMinutes() + minutes);
+  return date;
+};
 
 export default function App() {
   const [airportSelectionModal, setAirportSelectionModal] =

@@ -1,6 +1,7 @@
 import { Modal, Tabs } from "antd";
 import * as React from "react";
 import { IFlight, INDICATORS, INDICATOR_CONFIGS } from "src/App";
+import FlightChart from "./FlightChart";
 import Gauge from "./Gauge";
 import SeatVisualization from "./SeatVisualization";
 
@@ -46,6 +47,14 @@ export default function FlightModal(props: IFlightModalProps) {
                   )}
                   color={INDICATOR_CONFIGS[indicator].color}
                 />
+              </div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div style={{ height: 140, width: "94%", marginTop: "30px" }}>
+                  <FlightChart
+                    color={INDICATOR_CONFIGS[indicator].color}
+                    seriesName={indicator}
+                  />
+                </div>
               </div>
             </Tabs.TabPane>
           ))}
