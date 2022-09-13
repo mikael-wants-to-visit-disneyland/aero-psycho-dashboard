@@ -17,7 +17,7 @@ Imagine a future where airlines' optimization of customer experience has reached
 
 This project is an MVP for the second user group. We aim to give airports the ability to monitor incoming flights, both on an aggregate and a granular level.
 
-**Note**: This vision of biometric customer monitoring obviously has a disturbing taste; such a policy would constitute an egregious violation of privacy. Our aim here is not to suggest how air travel should develop, but rather to inspire you with the possibilities of cutting-edge technologies. And like all good pieces of dystopian fiction, hopefully this will strengthen your resolve to build up a future in which we would not have to experience such policies.
+**Note**: This vision of biometric customer monitoring obviously has a disturbing taste; such a policy would constitute an egregious violation of privacy. Our aim here is not to suggest how air travel should develop, but rather to inspire you with the possibilities of cutting-edge technologies. And like all good pieces of dystopian fiction, hopefully this will strengthen your resolve to fight for a future in which we would not be subject to such policies.
 
 ## Architecture
 
