@@ -2,7 +2,9 @@
 
 An isomorphic React app with serverless architecture, alongside a serverless API, to showcase these technologies for an IoT use case.
 
-You can try the application [here](https://9dlnegtote.execute-api.us-east-1.amazonaws.com/dev/), or watch a [video](https://www.loom.com/share/a09e37c9963a49b18fc872859001447c) of it. Click on the airport name to access other airports (TODO: clarify the UI so that there is no need to state this explicitly).
+You can try the application [here](https://9dlnegtote.execute-api.us-east-1.amazonaws.com/dev/), or watch a [video](https://www.loom.com/share/a09e37c9963a49b18fc872859001447c) of it. 
+- Click on the airport name to change airport.
+- Click on a row in the table to drill down into that flight's metrics.
 
 Although the API too is explained below, this repo contains only the app. Head over [here](https://github.com/mikael-wants-to-visit-disneyland/aero-psycho-api) to view the API's code.
 
